@@ -1,0 +1,285 @@
+<?php
+function long_chaine($chaine) // Fonction que j'ai créer pour retourner la longueur d'une chaine de caractéres
+{
+	$i=0;
+	while ((isset($chaine[$i])))
+	{
+		$i++;
+
+	}
+	return (($i));
+}
+
+function delete_esp_inutile($tab)
+{
+$tab_esp=array();	
+foreach ($tab as $phrase)
+{
+		
+		$phrase=preg_replace("#\s{2,}#"," ",$phrase);
+		$tab_esp[]=$phrase;
+}
+return ($tab_esp);
+}
+
+function corrige_virgule($tab)
+{
+	$T=array();
+	foreach ($tab as $phrase)
+	{
+		$T[]=preg_replace("#[\s+],[\s+]#",",",$phrase);
+	}
+	return ($T);
+}
+
+function corrige_point_virgule($tab)
+{
+	$T=array();
+	foreach ($tab as $phrase)
+	{
+		$T[]=preg_replace("#[\s+];[\s+]#",",",$phrase);
+	}
+	return ($T);
+}
+
+function corrige_tiret($tab)
+{
+	$T=array();
+	foreach ($tab as $phrase)
+	{
+		$T[]=preg_replace("#[\s+]-[\s+]#",",",$phrase);
+	}
+	return ($T);
+}
+
+
+
+function corrige_point($tab)
+{
+	$T=array();
+	foreach ($tab as $phrase)
+	{
+		$i=long_chaine($phrase)-1;
+		$T[]=preg_replace("#\s*[{.}!?]\s*#",$phrase[$i],$phrase);
+	}
+	return ($T);
+}
+
+function corrige_apostrophe($tab)
+{
+	$T=array();
+	foreach ($tab as $phrase)
+	{
+		$T[]=preg_replace("#\s*'\s*#","'",$phrase);
+	}
+	return ($T);
+}
+
+
+//Fonction qui concaténe deux chaines
+function concate($ch1,$ch2)
+{
+	$chaine=$ch1."".$ch2;
+	return($chaine);
+}
+//Fonction qui découpe la chaine en un tableau de mots puis retourne ce dernier 
+function decoupe_par_esp($chaine)
+{
+	$i=0;
+	$tab=array();
+		$j=0;
+		$test=1;
+		$tab[0]="";
+	while($i<long_chaine($chaine))
+	{
+
+		if ($chaine[$i]==" ")
+		{
+			$i++;
+			if ($tab[$j]!="")
+			{
+				$j++;
+				$tab[$j]="";
+			}
+		}
+		
+		else
+		{
+			$tab[$j]=concate($tab[$j],$chaine[$i]);
+			$i++;
+		}
+
+	}
+		return ($tab);
+}
+
+function decoupe_par_phrase($chaine)
+{
+	$i=0;
+	$tab=array();
+		$j=0;
+		$test=1;
+		$tab[0]="";
+	while($i<long_chaine($chaine))
+	{
+
+		if ($chaine[$i]=="." || $chaine[$i]=="?" || $chaine[$i]=="!")
+		{
+
+			$tab[$j]=concate($tab[$j],$chaine[$i]);
+			$i++;
+			if ($tab[$j]!="")
+			{
+				$j++;
+				$tab[$j]="";
+			}
+		}
+		
+		else
+		{
+			$tab[$j]=concate($tab[$j],$chaine[$i]);
+			$i++;
+		}
+
+	}
+		return ($tab);
+}
+
+function is_car_maj($car)
+{
+	if ($car<='Z' && $car>='A')
+		return "true";
+	else
+		return "false";
+
+}
+
+
+function is_chaine_phrase($chaine)
+{
+	if (is_car_maj($chaine[0])=="true" && is_car_point($chaine[long_chaine($chaine)-1]))
+		return "true";
+	else
+		return "false";
+}
+
+function is_car_alpha ($car)
+{
+	if (long_chaine($car)==1)
+	{
+		if(($car>='a' && $car<='z') || ($car>='A' && $car<='Z'))
+		{
+			return "true";
+		}
+	}
+	return "false";
+}
+
+function is_car_numeric($car)
+{
+if ($car>=0 && $car<=9)
+	return "true";
+	return "false";
+}
+	
+function is_chaine_alpha($chaine)
+{
+	for ($i=0;$i>long_chaine($chaine);$i++)
+	{
+		if (is_car_alpha($chaine[$i]=="false"))
+			return "false";
+
+	}
+
+			return "true";
+}
+
+		
+
+function long_tab($tab) // Fonction qui calcule la taille du tableau
+{
+	$i=0;
+	while (isset ($tab[$i]))
+	{
+		$i++;
+	}
+	return ($i);
+}
+//Fonction qui vérifie si M ou m est présent dans une chaine
+function trouve_mM ($chaine)  
+{
+	$j=0;
+	$test=0;
+	for ($i=0;$i<long_chaine($chaine);$i++)
+	{
+		if ($chaine[$j]== "M" || $chaine[$j]== "m")
+			{
+				$test=1;
+				break;
+			}
+			$j++;
+	}
+	return ($test);
+}
+
+function invers_car_case ($car)
+{
+	$car_min='a';
+	$car_maj='A';
+	for ($i=0;$i<=26;$i++)
+	{
+		if ($car==$car_min)
+			return ($car_maj);
+		else
+		{
+			$car_min++;
+			$car_maj++;
+		}
+	}
+
+}
+
+function test_mot($chaine)
+{
+		if (is_chaine_alpha($chaine)=="true")
+		{
+			if (long_chaine($chaine)<=20)
+				echo "";
+			else
+				echo "La longueur maximale est 20";
+		}
+				else
+					echo "La chaine doit etre numérique";
+}
+
+function is_empty ($chaine)
+{
+	if (long_chaine($chaine)==0)
+		return "true";
+	else
+		return "false";
+}
+
+
+function genere_champ($nb)
+{
+	if(is_car_numeric($nb)=="true")
+	{
+	echo "<form method='post'>";
+	for ($i=1;$i<=$nb;$i++)
+	{
+		$name_champ="champ"."".(string)$i;
+		echo "<label for='".$name_champ."'>Mot N°".$i."</label><br>";
+		
+		echo "<input type='text' name='".$name_champ."'><br><br>";
+	}
+	echo "</form>";
+	}
+	return ($_POST);
+}
+
+
+
+
+
+?>
